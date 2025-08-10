@@ -58,11 +58,19 @@
         }}
       </p>
     </div>
+
+    <div v-else>
+      <div class="divide-y divide-gray-200">
+        <ScheduleItem v-for="schedule in schedules" :key="schedule.id" :schedule="schedule" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import BaseButton from '../common/BaseButton.vue'
+import ScheduleItem from './ScheduleItem.vue'
+import ScheduleHeader from './ScheduleHeader.vue'
 import type { Schedule } from '@/types/schedule'
 import type { PaginationInfo } from '@/types/pagination'
 import type { SortOrder } from '@/types/api'
