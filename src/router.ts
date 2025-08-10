@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SchedulesView from './views/SchedulesView.vue'
+import SchedulesView from '@/views/SchedulesView.vue'
+import ScheduleForm from '@/views/ScheduleForm.vue'
 
 const routes = [
   {
@@ -8,8 +9,15 @@ const routes = [
     component: SchedulesView,
   },
   {
-    path: '/:pathMatch(.*)*',
-    redirect: '/',
+    path: '/schedule/new',
+    name: 'ScheduleCreate',
+    component: ScheduleForm,
+  },
+  {
+    path: '/schedule/:id/edit',
+    name: 'ScheduleEdit',
+    component: ScheduleForm,
+    props: true,
   },
 ]
 
