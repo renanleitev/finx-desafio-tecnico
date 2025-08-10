@@ -63,6 +63,18 @@
       <div class="divide-y divide-gray-200">
         <ScheduleItem v-for="schedule in schedules" :key="schedule.id" :schedule="schedule" />
       </div>
+
+      <div class="px-6 py-4 border-t border-gray-200">
+        <PaginationComponent
+          :current-page="pagination.currentPage"
+          :total-pages="pagination.totalPages"
+          :can-go-prev="canGoPrev"
+          :can-go-next="canGoNext"
+          @go-to-page="goToPage"
+          @prev-page="prevPage"
+          @next-page="nextPage"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -71,6 +83,7 @@
 import BaseButton from '../common/BaseButton.vue'
 import ScheduleItem from './ScheduleItem.vue'
 import ScheduleHeader from './ScheduleHeader.vue'
+import PaginationComponent from '@/components/common/PaginationComponent.vue'
 import type { Schedule } from '@/types/schedule'
 import type { PaginationInfo } from '@/types/pagination'
 import type { SortOrder } from '@/types/api'
@@ -104,6 +117,18 @@ function changeItemsPerPage(items: number) {
 
 function toggleSort() {
   emit('toggle-sort')
+}
+
+function goToPage(page: number) {
+  emit('go-to-page', page)
+}
+
+function prevPage() {
+  emit('prev-page')
+}
+
+function nextPage() {
+  emit('next-page')
 }
 
 function retryFetch() {
