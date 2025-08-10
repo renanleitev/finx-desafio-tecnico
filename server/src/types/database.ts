@@ -23,6 +23,17 @@ export interface ISchedule {
   observacoes?: string
 }
 
+export interface ICreateSchedule {
+  medico: IDoctor
+  paciente: IPatient
+  dataAgendamento: string
+  observacoes?: string
+}
+
+export interface IUpdateSchedule extends Partial<ICreateSchedule> {
+  status?: string
+}
+
 export interface IFilters {
   medico?: string
   paciente?: string

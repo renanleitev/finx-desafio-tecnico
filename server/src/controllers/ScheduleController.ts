@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { ScheduleService } from '../services/ScheduleService'
-import { IFilters } from '../types/database'
+import { IFilters, ICreateSchedule } from '../types/database'
 import { IPaginationParams, ISortParams } from '../types/api'
 import { ApiResponse } from '../types/api'
 import { PaginationUtils } from '../utils/pagination'
@@ -64,6 +64,169 @@ export class ScheduleController {
       res.json(response)
     } catch (error) {
       this.handleError(res, error, 'Erro ao buscar agendamentos')
+    }
+  }
+
+  async getScheduleById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params
+      const scheduleId = Number.parseInt(id)
+
+      if (isNaN(scheduleId)) {
+        res.status(400).json({
+          success: false,
+          message: 'ID do agendamento deve ser um número válido',
+        })
+        return
+      }
+
+      const schedule = await this.scheduleService.getScheduleById(scheduleId)
+
+      const response: ApiResponse = {
+        success: true,
+        data: schedule,
+      }
+
+      res.json(response)
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('não encontrado')) {
+        res.status(404).json({
+          success: false,
+          message: error.message,
+        })
+      } else {
+        this.handleError(res, error, 'Erro ao buscar agendamento')
+      }
+    }
+  }
+
+  async createSchedule(req: Request, res: Response): Promise<void> {
+    try {
+      const { medico, paciente, dataAgendamento, observacoes } = req.body
+
+      // Validações básicas
+      if (!medico || !medico.nome) {
+        res.status(400).json({
+          success: false,
+          message: 'Dados do médico são obrigatórios',
+        })
+        return
+      }
+
+      if (!paciente || !paciente.nome) {
+        res.status(400).json({
+          success: false,
+          message: 'Dados do paciente são obrigatórios',
+        })
+        return
+      }
+
+      if (!dataAgendamento) {
+        res.status(400).json({
+          success: false,
+          message: 'Data de agendamento é obrigatória',
+        })
+        return
+      }
+
+      const scheduleData: ICreateSchedule = {
+        medico,
+        paciente,
+        dataAgendamento,
+        observacoes,
+      }
+
+      const newSchedule = await this.scheduleService.createSchedule(scheduleData)
+
+      const response: ApiResponse = {
+        success: true,
+        data: newSchedule,
+        message: 'Agendamento criado com sucesso',
+      }
+
+      res.status(201).json(response)
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('Dados inválidos')) {
+        res.status(400).json({
+          success: false,
+          message: error.message,
+        })
+      } else {
+        this.handleError(res, error, 'Erro ao criar agendamento')
+      }
+    }
+  }
+
+  async updateSchedule(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params
+      const scheduleId = parseInt(id)
+
+      if (isNaN(scheduleId)) {
+        res.status(400).json({
+          success: false,
+          message: 'ID do agendamento deve ser um número válido',
+        })
+        return
+      }
+
+      const updatedSchedule = await this.scheduleService.updateSchedule(scheduleId, req.body)
+
+      const response: ApiResponse = {
+        success: true,
+        data: updatedSchedule,
+        message: 'Agendamento atualizado com sucesso',
+      }
+
+      res.json(response)
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('não encontrado')) {
+        res.status(404).json({
+          success: false,
+          message: error.message,
+        })
+      } else if (error instanceof Error && error.message.includes('Dados inválidos')) {
+        res.status(400).json({
+          success: false,
+          message: error.message,
+        })
+      } else {
+        this.handleError(res, error, 'Erro ao atualizar agendamento')
+      }
+    }
+  }
+
+  async deleteSchedule(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params
+      const scheduleId = parseInt(id)
+
+      if (isNaN(scheduleId)) {
+        res.status(400).json({
+          success: false,
+          message: 'ID do agendamento deve ser um número válido',
+        })
+        return
+      }
+
+      const deletedSchedule = await this.scheduleService.deleteSchedule(scheduleId)
+
+      const response: ApiResponse = {
+        success: true,
+        data: deletedSchedule,
+        message: 'Agendamento deletado com sucesso',
+      }
+
+      res.json(response)
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('não encontrado')) {
+        res.status(404).json({
+          success: false,
+          message: error.message,
+        })
+      } else {
+        this.handleError(res, error, 'Erro ao deletar agendamento')
+      }
     }
   }
 
