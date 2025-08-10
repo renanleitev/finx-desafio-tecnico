@@ -38,7 +38,7 @@
               {{ formatDate(schedule.dataCriacao) }}
             </p>
             <p class="text-sm text-gray-500">Data de Criação</p>
-            <p class="text-sm text-gray-500">{{ schedule.status }}</p>
+            <StatusChip :status="schedule.status" />
           </div>
         </div>
       </div>
@@ -51,6 +51,7 @@ import { defineProps, defineEmits } from 'vue'
 import { formatDate, calculateAge } from '@/utils/dateUtils'
 import { formatDoctorName } from '@/utils/formatters'
 import type { Schedule } from '@/types/schedule'
+import StatusChip from '../common/StatusChip.vue'
 
 interface Props {
   schedule: Schedule
