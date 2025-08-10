@@ -7,117 +7,61 @@
       @submit.prevent="handleSubmit"
       class="mx-auto p-6 bg-white rounded shadow space-y-6 mb-12"
     >
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="medicoNome">Médico</label>
-        <input
-          id="medicoNome"
-          v-model="form.medico.nome"
-          type="text"
-          required
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Nome do médico"
-        />
-      </div>
+      <BaseInput v-model="form.medico.nome" label="Médico" placeholder="Nome do médico" required />
 
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="medicoEspecialidade"
-            >Especialidade</label
-          >
-          <input
-            id="medicoEspecialidade"
-            v-model="form.medico.especialidade"
-            type="text"
-            required
-            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Especialidade"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="medicoCrm">CRM</label>
-          <input
-            id="medicoCrm"
-            v-model="form.medico.crm"
-            type="text"
-            required
-            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="CRM"
-          />
-        </div>
+        <BaseInput
+          v-model="form.medico.especialidade"
+          label="Especialidade"
+          placeholder="Especialidade"
+          required
+        />
+        <BaseInput v-model="form.medico.crm" label="CRM" placeholder="CRM" required />
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="pacienteNome"
-          >Paciente</label
-        >
-        <input
-          id="pacienteNome"
-          v-model="form.paciente.nome"
-          type="text"
-          required
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Nome do paciente"
-        />
-      </div>
+      <BaseInput
+        v-model="form.paciente.nome"
+        label="Paciente"
+        placeholder="Nome do paciente"
+        required
+      />
 
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="pacienteDataNascimento"
-            >Data de Nascimento</label
-          >
-          <input
-            id="pacienteDataNascimento"
-            v-model="form.paciente.dataNascimento"
-            type="date"
-            required
-            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="pacienteTelefone"
-            >Telefone</label
-          >
-          <input
-            id="pacienteTelefone"
-            v-model="form.paciente.telefone"
-            type="tel"
-            required
-            placeholder="(xx) xxxx-xxxx"
-            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <BaseInput
+          v-model="form.paciente.dataNascimento"
+          type="date"
+          label="Data de Nascimento"
+          required
+        />
+        <BaseInput
+          v-model="form.paciente.telefone"
+          type="tel"
+          label="Telefone"
+          placeholder="(xx) xxxx-xxxx"
+          required
+        />
         <div class="col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="pacienteEmail"
-            >Email</label
-          >
-          <input
-            id="pacienteEmail"
+          <BaseInput
             v-model="form.paciente.email"
             type="email"
-            required
+            label="Email"
             placeholder="email@exemplo.com"
-            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
         </div>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="dataAgendamento"
-          >Data e Hora do Agendamento</label
-        >
-        <input
-          id="dataAgendamento"
-          v-model="form.dataAgendamento"
-          type="datetime-local"
-          required
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+      <BaseInput
+        v-model="form.dataAgendamento"
+        type="datetime-local"
+        label="Data e Hora do Agendamento"
+        required
+      />
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="observacoes"
-          >Observações</label
-        >
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="observacoes">
+          Observações
+        </label>
         <textarea
           id="observacoes"
           v-model="form.observacoes"
@@ -127,18 +71,8 @@
         ></textarea>
       </div>
 
-      <div v-if="isEdit">
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="status">Status</label>
-        <select
-          id="status"
-          v-model="form.status"
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="agendado">Agendado</option>
-          <option value="confirmado">Confirmado</option>
-          <option value="cancelado">Cancelado</option>
-          <option value="concluido">Concluído</option>
-        </select>
+      <div v-if="isEdit && form.status">
+        <BaseSelect v-model="form.status" label="Status" :options="statusOptions" required />
       </div>
 
       <div class="flex justify-end space-x-3">
@@ -160,6 +94,8 @@ import { ScheduleService } from '@/services/scheduleService'
 import type { ICreateSchedule, IUpdateSchedule } from '@/types/schedule'
 import PageContainer from '@/components/common/PageContainer.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
+import BaseInput from '@/components/common/BaseInput.vue'
+import BaseSelect from '@/components/common/BaseSelect.vue'
 import { useToast } from 'vue-toast-notification'
 import type { ErrorMessage } from '@/types/error'
 
@@ -187,6 +123,13 @@ const form = reactive<ICreateSchedule & Partial<{ status: string }>>({
   observacoes: '',
   status: undefined,
 })
+
+const statusOptions = [
+  { value: 'agendado', label: 'Agendado' },
+  { value: 'confirmado', label: 'Confirmado' },
+  { value: 'cancelado', label: 'Cancelado' },
+  { value: 'concluido', label: 'Concluído' },
+]
 
 onMounted(async () => {
   if (isEdit && scheduleId) {
