@@ -1,11 +1,12 @@
 <template>
   <div id="app">
     <router-view />
+    <FloatingButton />
   </div>
 </template>
 
 <script setup lang="ts">
-
+import FloatingButton from './components/common/FloatingButton.vue'
 </script>
 
 <style>
