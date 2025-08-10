@@ -40,6 +40,10 @@
             <p class="text-sm text-gray-500">Data de Criação</p>
             <StatusChip :status="schedule.status" />
           </div>
+
+          <div class="flex-shrink-0">
+            <BaseButton variant="primary" size="md" @click="goToEdit"> Editar </BaseButton>
+          </div>
         </div>
       </div>
     </div>
@@ -52,14 +56,22 @@ import { formatDate, calculateAge } from '@/utils/dateUtils'
 import { formatDoctorName } from '@/utils/formatters'
 import type { Schedule } from '@/types/schedule'
 import StatusChip from '../common/StatusChip.vue'
+import BaseButton from '../common/BaseButton.vue'
+import { useRouter } from 'vue-router'
 
 interface Props {
   schedule: Schedule
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 defineEmits<{
   'view-details': [schedule: Schedule]
 }>()
+
+const router = useRouter()
+
+function goToEdit() {
+  router.push({ name: 'ScheduleEdit', params: { id: props.schedule.id } })
+}
 </script>
