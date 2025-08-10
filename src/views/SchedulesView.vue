@@ -26,6 +26,7 @@
       @prev-page="prevPage"
       @next-page="nextPage"
       @retry-fetch="fetchSchedules"
+      @schedule-deleted="fetchSchedules"
     />
   </PageContainer>
 </template>
