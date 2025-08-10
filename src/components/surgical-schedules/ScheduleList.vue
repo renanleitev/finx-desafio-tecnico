@@ -61,7 +61,12 @@
 
     <div v-else>
       <div class="divide-y divide-gray-200">
-        <ScheduleItem v-for="schedule in schedules" :key="schedule.id" :schedule="schedule" />
+        <ScheduleItem
+          v-for="schedule in schedules"
+          :key="schedule.id"
+          :schedule="schedule"
+          @deleted="handleScheduleDeleted"
+        />
       </div>
 
       <div class="px-6 py-4 border-t border-gray-200">
@@ -109,6 +114,7 @@ const emit = defineEmits<{
   'prev-page': []
   'next-page': []
   'retry-fetch': []
+  'schedule-deleted': [scheduleId: number]
 }>()
 
 function changeItemsPerPage(items: number) {
@@ -133,5 +139,9 @@ function nextPage() {
 
 function retryFetch() {
   emit('retry-fetch')
+}
+
+function handleScheduleDeleted(scheduleId: number) {
+  emit('schedule-deleted', scheduleId)
 }
 </script>

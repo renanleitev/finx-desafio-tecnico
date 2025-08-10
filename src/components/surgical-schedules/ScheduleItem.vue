@@ -41,37 +41,71 @@
             <StatusChip :status="schedule.status" />
           </div>
 
-          <div class="flex-shrink-0">
+          <div class="flex-shrink-0 flex gap-2">
             <BaseButton variant="primary" size="md" @click="goToEdit"> Editar </BaseButton>
+            <BaseButton variant="danger" size="md" @click="openDeleteModal"> Apagar </BaseButton>
           </div>
         </div>
       </div>
     </div>
+
+    <DeleteModal :show="showDeleteModal" @cancel="closeDeleteModal" @confirm="confirmDelete" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { defineProps, defineEmits } from 'vue'
 import { formatDate, calculateAge } from '@/utils/dateUtils'
 import { formatDoctorName } from '@/utils/formatters'
 import type { Schedule } from '@/types/schedule'
 import StatusChip from '../common/StatusChip.vue'
 import BaseButton from '../common/BaseButton.vue'
+import DeleteModal from '../common/DeleteModal.vue'
 import { useRouter } from 'vue-router'
+import { ScheduleService } from '@/services/scheduleService'
+import type { ErrorMessage } from '@/types/error'
+import { useToast } from 'vue-toast-notification'
 
 interface Props {
   schedule: Schedule
 }
-
 const props = defineProps<Props>()
 
-defineEmits<{
-  'view-details': [schedule: Schedule]
+const emit = defineEmits<{
+  deleted: [scheduleId: number]
 }>()
 
 const router = useRouter()
 
+const $toast = useToast()
+
+const showDeleteModal = ref(false)
+
 function goToEdit() {
   router.push({ name: 'ScheduleEdit', params: { id: props.schedule.id } })
+}
+
+function openDeleteModal() {
+  showDeleteModal.value = true
+}
+
+function closeDeleteModal() {
+  showDeleteModal.value = false
+}
+
+async function confirmDelete() {
+  try {
+    await ScheduleService.deleteSchedule(props.schedule.id)
+    closeDeleteModal()
+    emit('deleted', props.schedule.id)
+    $toast.success('Consulta apagada com sucesso!', { position: 'top-right' })
+  } catch (error) {
+    console.error('Erro ao deletar agendamento:', error)
+    $toast.error((error as ErrorMessage).response?.data?.message || 'Erro ao apagar a consulta.', {
+      position: 'top-right',
+    })
+    closeDeleteModal()
+  }
 }
 </script>

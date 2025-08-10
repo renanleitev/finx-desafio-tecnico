@@ -166,7 +166,6 @@ import type { ErrorMessage } from '@/types/error'
 const route = useRoute()
 const router = useRouter()
 const $toast = useToast()
-console.log(route.params)
 const scheduleId = route.params.id ? Number(route.params.id) : null
 const isEdit = scheduleId !== null
 
