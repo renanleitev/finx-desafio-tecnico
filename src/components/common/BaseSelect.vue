@@ -10,14 +10,14 @@
       :value="modelValue"
       :disabled="disabled"
       :required="required"
-      :class="selectClasses"
+      :class="[selectClasses, modelValue === '' ? 'text-gray-400' : 'text-gray-900']"
       @change="handleChange"
     >
-      <option v-if="placeholder" value="" disabled>
+      <option v-if="placeholder" value="" disabled class="text-gray-400">
         {{ placeholder }}
       </option>
 
-      <option v-for="option in options" :key="option.value" :value="option.value">
+      <option v-for="option in options" :key="option.value" :value="option.value" class="text-gray-900">
         {{ option.label }}
       </option>
     </select>

@@ -52,13 +52,13 @@ npm install
 
 ## Inciando a aplicação
 
-Execute o comando abaixo para iniciar o back (irá rodar em ):
+Execute o comando abaixo para iniciar o back (por padrão, irá rodar em http://localhost:3001):
 
 ```sh
 npm run server
 ```
 
-Abra outro terminal e execute o comando abaixo para iniciar o front:
+Abra outro terminal e execute o comando abaixo para iniciar o front (por padrão, irá rodar em http://localhost:5173):
 
 ```sh
 npm start

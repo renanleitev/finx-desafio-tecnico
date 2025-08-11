@@ -20,6 +20,21 @@
       />
 
       <BaseInput v-model="localFilters.dataCriacao" type="date" label="Data de Criação" />
+
+      <BaseInput
+        v-model="localFilters.especialidade"
+        type="text"
+        label="Especialidade"
+        placeholder="Nome da especialidade"
+      />
+
+      <BaseSelect
+        v-model="localFilters.status!"
+        label="Status"
+        :options="statusOptions"
+        placeholder="Escolha um status..."
+      />
+
     </div>
 
     <div class="mt-4 flex justify-end space-x-6">
@@ -35,7 +50,9 @@
 import { reactive, watch } from 'vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
+import BaseSelect from '../common/BaseSelect.vue'
 import type { ScheduleFilters } from '@/types/schedule'
+import { statusOptions } from '@/constants/status'
 
 interface Props {
   filters: ScheduleFilters
@@ -53,6 +70,9 @@ const localFilters = reactive<ScheduleFilters>({
   medico: props.filters.medico || '',
   paciente: props.filters.paciente || '',
   dataCriacao: props.filters.dataCriacao || '',
+  dataAgendamento: props.filters.dataAgendamento || '',
+  especialidade: props.filters.especialidade || '',
+  status: props.filters.status || '',
 })
 
 function applyFilters() {
