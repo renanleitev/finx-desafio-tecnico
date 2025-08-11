@@ -16,6 +16,7 @@ export interface ScheduleFilters {
   medico?: string
   paciente?: string
   dataCriacao?: string
+  dataAgendamento?: string
   status?: string
   especialidade?: string
 }

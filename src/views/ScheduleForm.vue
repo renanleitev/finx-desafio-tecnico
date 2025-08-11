@@ -98,6 +98,7 @@ import BaseInput from '@/components/common/BaseInput.vue'
 import BaseSelect from '@/components/common/BaseSelect.vue'
 import { useToast } from 'vue-toast-notification'
 import type { ErrorMessage } from '@/types/error'
+import { statusOptions } from '@/constants/status'
 
 const route = useRoute()
 const router = useRouter()
@@ -123,13 +124,6 @@ const form = reactive<ICreateSchedule & Partial<{ status: string }>>({
   observacoes: '',
   status: undefined,
 })
-
-const statusOptions = [
-  { value: 'agendado', label: 'Agendado' },
-  { value: 'confirmado', label: 'Confirmado' },
-  { value: 'cancelado', label: 'Cancelado' },
-  { value: 'concluido', label: 'Concluído' },
-]
 
 onMounted(async () => {
   if (isEdit && scheduleId) {
