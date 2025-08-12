@@ -2,7 +2,7 @@
   <div class="w-full">
     <label v-if="label" :for="inputId" class="block text-sm font-medium text-gray-700 mb-1">
       {{ label }}
-      <span v-if="required" class="text-red-500 ml-1">*</span>
+      <span v-if="required" class="text-red-500 ml-1" aria-hidden="true">*</span>
     </label>
 
     <div class="relative">
@@ -14,6 +14,9 @@
         :disabled="disabled"
         :required="required"
         :class="inputClasses"
+        :aria-required="required || undefined"
+        :aria-invalid="error ? 'true' : 'false'"
+        :aria-describedby="describedById"
         @input="handleInput"
         @blur="$emit('blur')"
         @focus="$emit('focus')"
@@ -22,16 +25,17 @@
       <div
         v-if="$slots.icon"
         class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+        aria-hidden="true"
       >
         <slot name="icon" />
       </div>
     </div>
 
-    <p v-if="error" class="mt-1 text-sm text-red-600">
+    <p v-if="error" :id="errorId" class="mt-1 text-sm text-red-600" role="alert">
       {{ error }}
     </p>
 
-    <p v-else-if="hint" class="mt-1 text-sm text-gray-500">
+    <p v-else-if="hint" :id="hintId" class="mt-1 text-sm text-gray-500">
       {{ hint }}
     </p>
   </div>
@@ -42,7 +46,16 @@ import { computed, useId, useSlots } from 'vue'
 
 interface Props {
   modelValue: string | number | undefined
-  type?: 'text' | 'email' | 'password' | 'search' | 'tel' | 'url' | 'date' | 'datetime-local' | 'number'
+  type?:
+    | 'text'
+    | 'email'
+    | 'password'
+    | 'search'
+    | 'tel'
+    | 'url'
+    | 'date'
+    | 'datetime-local'
+    | 'number'
   label?: string
   placeholder?: string
   disabled?: boolean
@@ -63,7 +76,16 @@ const emit = defineEmits<{
   focus: []
 }>()
 
-const inputId = useId()
+const baseId = useId()
+const inputId = `${baseId}-input`
+const errorId = `${baseId}-error`
+const hintId = `${baseId}-hint`
+
+const describedById = computed(() => {
+  if (props.error) return errorId
+  if (props.hint) return hintId
+  return undefined
+})
 
 const inputClasses = computed(() => [
   'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors',
