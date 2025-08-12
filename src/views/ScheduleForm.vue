@@ -30,7 +30,7 @@
         <BaseInput
           v-model="form.paciente.dataNascimento"
           type="date"
-          label="Data de Nascimento"
+          label="Data Nascimento"
           required
         />
         <BaseInput
